@@ -1,0 +1,306 @@
+<!doctype html>
+
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Para Thalita — Eu te amo</title>
+  <style>
+    :root{
+      --bg:#120212;
+      --accent:#ff6b9f;
+      --soft:#ffd6e6;
+      --glass: rgba(255,255,255,0.06);
+      --card: rgba(255,255,255,0.04);
+      --shadow: 0 8px 30px rgba(0,0,0,0.6);
+      font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,#0b0220 0%, #2d052b 60%);color:var(--soft);}/* Page wrapper with stacked panels */
+.stage{height:100vh;width:100%;overflow:hidden;position:relative}
+.panels{position:absolute;left:0;top:0;width:100%;height:300%;transition:transform .45s cubic-bezier(.22,.9,.32,1)}
+.panel{height:100vh;width:100%;display:flex;align-items:center;justify-content:center;padding:24px}
+
+/* Hero / foto */
+.hero{background: url('./myprincesa/background.png') center/cover no-repeat center/cover no-repeat; position:relative}
+.hero .overlay{position:absolute;inset:0;background:linear-gradient(180deg, rgba(0,0,0,0.18), rgba(0,0,0,0.45));}
+.hero .photo-card{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:12px}
+.avatar{width:260px;height:260px;border-radius:18px;background-size:cover;background-position:center;box-shadow:var(--shadow);border:4px solid rgba(255,255,255,0.06)}
+h1{margin:0;font-size:28px;letter-spacing:0.6px}
+p.lead{margin:0;opacity:.95}
+
+/* Draggable hint */
+.drag-hint{position:absolute;left:50%;transform:translateX(-50%);bottom:28px;background:var(--glass);backdrop-filter:blur(6px);padding:8px 14px;border-radius:999px;font-size:13px;color:var(--soft);display:flex;gap:8px;align-items:center}
+.chev{width:16px;height:16px;border-left:2px solid var(--soft);border-bottom:2px solid var(--soft);transform:rotate(-45deg);}
+
+/* Declaration panel */
+.declaration{display:flex;align-items:flex-start;justify-content:center}
+.card{max-width:900px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:28px;border-radius:16px;box-shadow:var(--shadow);border:1px solid rgba(255,255,255,0.03)}
+.declaration h2{color:var(--accent);margin:0 0 10px 0}
+.declaration p{line-height:1.6;color:#ffdfe9}
+
+/* Counter panel */
+.counter-wrap{display:flex;flex-direction:column;align-items:center;gap:16px}
+.counter{display:flex;gap:14px;align-items:center}
+.time-box{background:var(--card);padding:12px 18px;border-radius:10px;min-width:84px;text-align:center}
+.time-box .num{font-size:20px;font-weight:600}
+.time-box .lab{font-size:12px;opacity:.8}
+.control-row{display:flex;gap:12px}
+.btn{background:linear-gradient(90deg,var(--accent), #ff3d84);border:none;padding:10px 16px;border-radius:12px;color:white;cursor:pointer;box-shadow:0 8px 20px rgba(255,107,159,0.12);}
+
+/* Album */
+.albums{padding:24px;max-width:1100px;margin:0 auto}
+.albums h3{margin:0 0 12px 0;color:var(--accent)}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.photo{height:160px;border-radius:10px;overflow:hidden;position:relative;cursor:pointer}
+.photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .45s ease}
+.photo:hover img{transform:scale(1.06)}
+.pager{display:flex;gap:8px;justify-content:center;margin-top:14px}
+.page-btn{background:var(--card);padding:8px 12px;border-radius:8px;border:none;color:var(--soft);cursor:pointer}
+
+/* top nav */
+.top-nav{position:fixed;left:16px;top:16px;z-index:30}
+.nav-btn{background:rgba(0,0,0,0.28);padding:8px 12px;border-radius:10px;color:var(--soft);border:1px solid rgba(255,255,255,0.04);cursor:pointer}
+
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.65);display:none;align-items:center;justify-content:center;z-index:60}
+.modal .imgwrap{max-width:90vw;max-height:90vh}
+.modal img{width:100%;height:auto;border-radius:12px;display:block}
+
+/* toast */
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:36px;background:linear-gradient(90deg,var(--accent),#ff3d84);padding:10px 16px;border-radius:999px;color:white;display:none;z-index:70}
+
+/* responsive */
+@media(min-width:900px){
+  .grid{grid-template-columns:repeat(4,1fr)}
+  .avatar{width:320px;height:320px}
+}
+
+  </style>
+</head>
+<body>
+  <div class="top-nav">
+    <button class="nav-btn" id="goTop">Voltar ao começo</button>
+  </div>  <div class="stage" id="stage">
+    <div class="panels" id="panels">
+      <section class="panel hero">
+        <div class="overlay"></div>
+        <div class="photo-card" id="heroCard">
+          <div class="avatar" id="avatar" style="background-image: url('./myprincesa/capa.jpg')"></div>
+          <h1>Yure & Thalita ❣️</h1>
+          <p class="lead">Um pequeno portal para demonstrar meu amor por você minha princesa 🌷.</p>
+        </div>
+        <div class="drag-hint" id="dragHint"><div class="chev"></div><div>Arraste pra baixo</div></div>
+      </section><section class="panel declaration">
+    <div class="card">
+      <h2>Minha declaração</h2>
+      <p id="declarationText">Thalita, você é a mulher da minha vida. Meu amor, você é a garota mais incrível pra mim! Eu nunca vou cansar de dizer isso, nunca. Queria que você pudesse se ver pelos meus olhos, pra perceber o quanto eu te amo. Thalita, eu te amo muito, e eu te quero no meu futuro, na minha vida pra sempre. Quero viver ao seu lado, caminhar com você.
+
+Você é o amor da minha vida, e eu amo isso — e amo ser o amor da sua. Muito obrigado, THALITA VITÓRIA DA SILVA COSTA, por fazer parte da minha vida, por alegrar meus dias, por me transformar. Graças a você, eu sou alguém melhor, e todo dia eu luto pra ser alguém melhor — não por orgulho, não por ganância, não por nada disso.
+
+Todo dia eu luto e busco ser alguém melhor por você. Porque eu amo você. Porque eu quero ser alguém digno de você, digno de merecer o seu amor e, no futuro, merecer seus beijos, seus abraços, seu toque… ficar com você, andar junto com você. Eu te amo muito, eu te amo demais.<br></p>
+    </div>
+  </section>
+
+  <!-- Nova parte da declaração -->
+  <section class="panel declaration">
+    <div class="card">
+      <h2>Minha declaração (Continuação)</h2>
+      <p id="declarationText2">E, pra mim, você é a garota mais incrível desse mundo inteiro. Pra mim, você é a garota perfeita.
+
+E não se julgue, amor. Você não é uma péssima filha. Você não é uma péssima pessoa. Você não é uma péssima namorada. Você não é inútil, nem nada disso. Pelo contrário: você é a pessoa mais incrível desse mundo inteiro. E eu te amo. Eu te amo muito, muito, muito, e eu espero que o dia da gente se encontrar chegue logo.
+
+Sabe… eu fico um pouquinho nervoso toda vez que penso nisso, mas é o que eu mais quero neste mundo. E nós vamos lutar juntos, lado a lado, pra esse dia chegar logo. FELIZ ANIVERSÁRIO DE 3 MESES AMOR! EU TE AMO!
+
+Eu te amo, vida!
+Feliz aniversário de três meses, amor.
+    <div class="card" style="text-align:center">
+      <h2>Tempo de namoro</h2>
+      <p style="margin-top:4px;color:#ffe9f0">Começamos em 24/08/2025 às 18:48</p>
+      <div style="height:14px"></div>
+      <div class="counter" id="counter">
+        <div class="time-box"><div class="num" id="years">0</div><div class="lab">anos</div></div>
+        <div class="time-box"><div class="num" id="months">0</div><div class="lab">meses</div></div>
+        <div class="time-box"><div class="num" id="days">0</div><div class="lab">dias</div></div>
+        <div class="time-box"><div class="num" id="hours">0</div><div class="lab">h</div></div>
+        <div class="time-box"><div class="num" id="minutes">0</div><div class="lab">m</div></div>
+        <div class="time-box"><div class="num" id="seconds">0</div><div class="lab">s</div></div>
+      </div>
+
+      <div style="height:12px"></div>
+      <div class="control-row">
+        <button class="btn" id="loveBtn">Contagem (Clique)</button>
+        <button class="btn" id="openAlbum">Álbuns</button>
+      </div>
+    </div>
+
+    <!-- Albums area (same panel area but appears below) -->
+    <div class="albums" id="albumsPanel" style="width:100%;margin-top:22px">
+      <h3>Álbuns</h3>
+      <div class="grid" id="grid"></div>
+      <div class="pager" id="pager"></div>
+    </div>
+  </section>
+</div>
+
+  </div>  <div class="modal" id="modal"><div class="imgwrap"><img src="" id="modalImg"></div></div>
+  <div class="toast" id="toast">Eu te Amo Thalita Vitória</div>  <script>
+    /* ----- CONFIGURAÇÕES (troque githubBase para o raw folder onde estarão as imagens) ----- */
+    // Exemplo: https://raw.githubusercontent.com/usuario/repositorio/main/albumpasta
+    const githubBase = "./myprincesa"; // pasta com as fotos
+    // As imagens esperadas: photo1.jpg ... photo12.jpg
+    const totalPhotos = 12;
+
+    /* ----- Painéis / arrastar ----- */
+    const panels = document.getElementById('panels');
+    const stage = document.getElementById('stage');
+    let startY = 0, currentY = 0, isDragging = false;
+    const panelCount = 4;
+    let currentPanel = 0; // 0 hero,1 declaration,2 counter
+
+    function setPanel(i, immediate=false){
+      i = Math.max(0, Math.min(panelCount-1, i));
+      currentPanel = i;
+      panels.style.transition = immediate ? 'none' : '';
+      panels.style.transform = `translateY(${ -i * 100 }vh)`;
+      setTimeout(()=>panels.style.transition='transform .45s cubic-bezier(.22,.9,.32,1)');
+    }
+
+    function onPointerDown(e){
+      isDragging = true; startY = e.clientY || e.touches && e.touches[0].clientY; panels.style.transition='none';
+    }
+    function onPointerMove(e){
+      if(!isDragging) return;
+      currentY = (e.clientY || e.touches && e.touches[0].clientY) - startY;
+      const translate = -currentPanel*window.innerHeight + currentY;
+      panels.style.transform = `translateY(${translate}px)`;
+    }
+    function onPointerUp(e){
+      if(!isDragging) return; isDragging=false; panels.style.transition='transform .45s cubic-bezier(.22,.9,.32,1)';
+      const threshold = window.innerHeight * 0.18; // 18% to change
+      if(currentY > threshold) setPanel(currentPanel-1);
+      else if(currentY < -threshold) setPanel(currentPanel+1);
+      else setPanel(currentPanel);
+      currentY = 0;
+    }
+
+    // Attach both mouse and touch
+    stage.addEventListener('mousedown', onPointerDown);
+    window.addEventListener('mousemove', onPointerMove);
+    window.addEventListener('mouseup', onPointerUp);
+    stage.addEventListener('touchstart', onPointerDown, {passive:true});
+    stage.addEventListener('touchmove', onPointerMove, {passive:true});
+    window.addEventListener('touchend', onPointerUp);
+
+    // top nav
+    document.getElementById('goTop').addEventListener('click', ()=>setPanel(0));
+
+    /* ----- Counter (auto-atualiza offline) ----- */
+    // Start date: 24 Aug 2025 18:48 local time
+    const start = new Date(2025, 7, 24, 18, 48, 0); // month index 7 = agosto
+
+    function computeDuration(from, to){
+      // returns object {years, months, days, hours, minutes, seconds}
+      let y = to.getFullYear() - from.getFullYear();
+      let m = to.getMonth() - from.getMonth();
+      let d = to.getDate() - from.getDate();
+      let hh = to.getHours() - from.getHours();
+      let mm = to.getMinutes() - from.getMinutes();
+      let ss = to.getSeconds() - from.getSeconds();
+      if(ss < 0){ ss += 60; mm -= 1; }
+      if(mm < 0){ mm += 60; hh -= 1; }
+      if(hh < 0){ hh += 24; d -= 1; }
+      if(d < 0){
+        // borrow days from previous month
+        const prevMonth = new Date(to.getFullYear(), to.getMonth(), 0); // last day of previous month
+        d += prevMonth.getDate(); m -= 1;
+      }
+      if(m < 0){ m += 12; y -= 1; }
+      return {years: y, months: m, days: d, hours: hh, minutes: mm, seconds: ss};
+    }
+
+    function updateCounter() {
+    const start = new Date("2025-08-24T18:48:00");
+    const now = new Date();
+    let diff = Math.floor((now - start) / 1000);
+
+    const days = Math.floor(diff / 86400);
+    diff %= 86400;
+
+    const hours = Math.floor(diff / 3600);
+    diff %= 3600;
+
+    const minutes = Math.floor(diff / 60);
+    const seconds = diff % 60;
+
+    document.getElementById("counter").innerText =
+        `${days} dias · ${hours} horas · ${minutes} minutos · ${seconds} segundos`;
+}
+setInterval(updateCounter, 1000);
+updateCounter();    updateCounter();
+    setInterval(updateCounter, 1000);
+
+    // Button shows declaration message
+    const toast = document.getElementById('toast');
+    document.getElementById('loveBtn').addEventListener('click', ()=>{
+      toast.style.display='block';
+      toast.style.opacity=0; toast.style.transition='opacity .25s';
+      setTimeout(()=>toast.style.opacity=1,10);
+      setTimeout(()=>{toast.style.opacity=0; setTimeout(()=>toast.style.display='none',300)},2500);
+    });
+
+    /* ----- Albums (12 fotos, 4 por página) ----- */
+    const photos = [];
+    for(let i=1;i<=totalPhotos;i++) photos.push(`${githubBase}/photo${i}.jpg`);
+
+    const grid = document.getElementById('grid');
+    const pager = document.getElementById('pager');
+    const perPage = 4;
+    let page = 0;
+
+    function renderPage(p){
+      page = p; grid.innerHTML='';
+      const startIndex = p*perPage;
+      const slice = photos.slice(startIndex, startIndex+perPage);
+      slice.forEach((src, idx)=>{
+        const el = document.createElement('div'); el.className='photo';
+        const img = document.createElement('img'); img.src = src; img.alt = `foto ${startIndex+idx+1}`;
+        // if image fails to load, show a subtle placeholder
+        img.onerror = () => { img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400"><rect width="100%" height="100%" fill="%23100a18"/><text x="50%" y="50%" fill="%23ff9db8" font-size="22" text-anchor="middle" dominant-baseline="middle">Foto faltando</text></svg>'}
+        el.appendChild(img);
+        el.addEventListener('click', ()=>openModal(src));
+        grid.appendChild(el);
+      });
+
+      // pager
+      pager.innerHTML='';
+      const pages = Math.ceil(photos.length / perPage);
+      for(let i=0;i<pages;i++){
+        const b = document.createElement('button'); b.className='page-btn'; b.textContent = i+1; if(i===p) b.style.opacity=1; b.onclick = ()=>renderPage(i);
+        pager.appendChild(b);
+      }
+    }
+
+    function openModal(src){
+      const modal = document.getElementById('modal'); const img = document.getElementById('modalImg'); img.src = src; modal.style.display='flex';
+    }
+    document.getElementById('modal').addEventListener('click', ()=>{document.getElementById('modal').style.display='none';});
+
+    // Open albums from button (snap panel to albums area)
+    document.getElementById('openAlbum').addEventListener('click', ()=>{
+      // ensure we're on the counter panel (index 2)
+      setPanel(2);
+      // small delay to ensure layout
+      setTimeout(()=>{
+        // scroll the albums area into view inside the panel if needed
+        const albums = document.getElementById('albumsPanel'); if(albums) albums.scrollIntoView({behavior:'smooth',block:'center'});
+      },500);
+    });
+
+    // initialize
+    renderPage(0);
+
+    // helpful tip: if you host images on GitHub, use raw.githubusercontent.com links
+    // Example raw path: https://raw.githubusercontent.com/usuario/repositorio/main/albumpasta/photo1.jpg
+  </script></body>
+</html>
